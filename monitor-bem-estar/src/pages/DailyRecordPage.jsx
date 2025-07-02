@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom'; 
-import { Form, Button, Card, Alert, Spinner } from 'react-bootstrap'; 
+import { Form, Button, Card, Alert, Spinner, InputGroup } from 'react-bootstrap'; 
 import { HumorMap, TipoAtividadeMap } from '../utils/enumMappings';
+import { toast } from 'react-toastify';
+
+/* Fontes */
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+/* Icones */
+import { faUser, faHeartbeat, faCalendarDay, faSmileBeam, faMobileAlt, faRunning } from '@fortawesome/free-solid-svg-icons';
 
 function DailyRecordPage() {
   const { id } = useParams(); 
@@ -17,8 +23,6 @@ function DailyRecordPage() {
   
   const [loading, setLoading] = useState(false);
   const [initialDataLoading, setInitialDataLoading] = useState(isEditMode); 
-  const [error, setError] = useState('');
-  const [successMessage, setSuccessMessage] = useState('');
   const navigate = useNavigate();
 
   
@@ -26,11 +30,10 @@ function DailyRecordPage() {
     if (isEditMode) {
       const fetchRecordToEdit = async () => {
         setInitialDataLoading(true);
-        setError('');
         const token = localStorage.getItem('authToken');
 
         if (!token) {
-          setError('Você não está autenticado. Por favor, faça login.');
+          toast.error('Você não está autenticado. Por favor, faça login.');
           setInitialDataLoading(false);
           navigate('/login');
           return;
@@ -56,7 +59,7 @@ function DailyRecordPage() {
               return;
             }
             const errorData = await response.json();
-            setError(errorData.message || `Erro ao carregar registro para edição: ${response.status}`);
+            toast.error(errorData.message || `Erro ao carregar registro para edição: ${response.status}`);
             console.error('Erro ao carregar registro:', response.status, errorData);
             return;
           }
@@ -70,7 +73,7 @@ function DailyRecordPage() {
           
         } catch (err) {
           console.error('Erro na requisição de carregamento:', err);
-          setError('Não foi possível carregar o registro para edição. Tente novamente mais tarde.');
+          toast.error('Não foi possível carregar o registro para edição. Tente novamente mais tarde.');
         } finally {
           setInitialDataLoading(false);
         }
@@ -83,12 +86,10 @@ function DailyRecordPage() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
-    setError('');
-    setSuccessMessage('');
 
     const token = localStorage.getItem('authToken');
     if (!token) {
-      setError('Você não está autenticado. Por favor, faça login.');
+      toast.error('Você não está autenticado. Por favor, faça login.');
       setLoading(false);
       navigate('/login');
       return;
@@ -103,7 +104,7 @@ function DailyRecordPage() {
 
     
     if (!recordData.dataRegistro || isNaN(recordData.humor) || isNaN(recordData.horasCelular) || isNaN(recordData.tipoAtividade)) {
-        setError("Por favor, preencha todos os campos obrigatórios com valores válidos.");
+        toast.error("Por favor, preencha todos os campos obrigatórios com valores válidos.");
         setLoading(false);
         return;
     }
@@ -124,7 +125,7 @@ function DailyRecordPage() {
 
       if (!response.ok) {
         if (response.status === 401 || response.status === 403) {
-          setError('Sessão expirada ou não autorizada. Faça login novamente.');
+          toast.error('Sessão expirada ou não autorizada. Faça login novamente.');
           localStorage.removeItem('authToken');
           navigate('/login');
           return;
@@ -141,7 +142,7 @@ function DailyRecordPage() {
         return;
       }
 
-      setSuccessMessage(`Registro diário ${isEditMode ? 'atualizado' : 'salvo'} com sucesso!`);
+      toast.success(`Registro diário ${isEditMode ? 'atualizado' : 'salvo'} com sucesso!`);
       if (!isEditMode) {
         setDataRegistro('');
         setHumor('');
@@ -149,13 +150,11 @@ function DailyRecordPage() {
         setTipoAtividade('');
       }
     
-      if (isEditMode) {
-        setTimeout(() => navigate('/historico'), 1500); 
-      }
+      setTimeout(() => navigate('/historico'), 1500); 
 
     } catch (err) {
       console.error('Erro na requisição:', err);
-      setError('Não foi possível conectar ao servidor. Tente novamente mais tarde.');
+      toast.error('Não foi possível conectar ao servidor. Tente novamente mais tarde.');
     } finally {
       setLoading(false);
     }
@@ -174,61 +173,58 @@ function DailyRecordPage() {
 
   return (
     <div className="container mt-5">
+      <div className="row justify-content-center">
+        <div className="col-md-8 col-lg-6">
+
       <Card className="shadow-lg">
         <Card.Header className={`text-center ${isEditMode ? 'bg-warning' : 'bg-info'} text-white`}>
           <h3>{isEditMode ? 'Editar Registro Diário' : 'Novo Registro Diário'}</h3>
         </Card.Header>
         <Card.Body>
           <Form onSubmit={handleSubmit}>
-            {error && <Alert variant="danger">{error}</Alert>}
-            {successMessage && <Alert variant="success">{successMessage}</Alert>}
-
             <Form.Group className="mb-3">
               <Form.Label htmlFor="dataRegistroInput">Data do Registro</Form.Label>
-              <Form.Control type="date" id="dataRegistroInput" value={dataRegistro} onChange={(e) => setDataRegistro(e.target.value)} required />
+               <InputGroup>
+                    <InputGroup.Text><FontAwesomeIcon icon={faCalendarDay} /></InputGroup.Text> 
+                    <Form.Control type="date" id="dataRegistroInput" value={dataRegistro} onChange={(e) => setDataRegistro(e.target.value)} required />
+                  </InputGroup>
             </Form.Group>
 
-            <Form.Group className="mb-3">
-              <Form.Label htmlFor="humorSelect">Humor</Form.Label>
-              <Form.Select id="humorSelect" value={humor} onChange={(e) => setHumor(e.target.value)} required>
-                <option value="">Selecione seu humor</option>
-                <option value="1">Feliz</option>
-                <option value="2">Produtivo</option>
-                <option value="3">Normal</option>
-                <option value="4">Ansioso</option>
-                <option value="5">Estressado</option>
-              </Form.Select>
-            </Form.Group>
+                <Form.Group className="mb-3">
+                  <Form.Label htmlFor="humorSelect">Humor</Form.Label>
+                  <InputGroup>
+                    <InputGroup.Text><FontAwesomeIcon icon={faSmileBeam} /></InputGroup.Text> 
+                    <Form.Select id="humorSelect" value={humor} onChange={(e) => setHumor(e.target.value)} required>
+                      <option value="">Selecione seu humor</option>
+                      {Object.entries(HumorMap).map(([key, value]) => (
+                        <option key={key} value={key}>{value}</option>
+                      ))}
+                    </Form.Select>
+                  </InputGroup>
+                </Form.Group>
 
-            <Form.Group className="mb-3">
-              <Form.Label htmlFor="horasCelularInput">Horas de Celular</Form.Label>
-              <Form.Control
-                type="number"
-                step="0.01"
-                id="horasCelularInput"
-                placeholder="Ex: 3.5"
-                value={horasCelular}
-                onChange={(e) => setHorasCelular(e.target.value)}
-                required
-                min="0"
-              />
-            </Form.Group>
+                <Form.Group className="mb-3">
+                  <Form.Label htmlFor="horasCelularInput">Horas de Celular</Form.Label>
+                  <InputGroup> 
+                    <InputGroup.Text><FontAwesomeIcon icon={faMobileAlt} /></InputGroup.Text> 
+                    <Form.Control type="number" step="0.01" id="horasCelularInput" placeholder="Ex: 3.5" value={horasCelular} onChange={(e) => setHorasCelular(e.target.value)} required min="0" />
+                  </InputGroup>
+                </Form.Group>
 
-            <Form.Group className="mb-3">
-              <Form.Label htmlFor="tipoAtividadeSelect">Tipo de Atividade</Form.Label>
-              <Form.Select
-                id="tipoAtividadeSelect"
-                value={tipoAtividade}
-                onChange={(e) => setTipoAtividade(e.target.value)}
-                required
-              >
-                <option value="">Selecione o tipo de atividade</option>
-                <option value="1">Trabalho</option>
-                <option value="2">Estudos</option>
-                <option value="3">Exercício</option>
-              </Form.Select>
-            </Form.Group>
-
+             
+                <Form.Group className="mb-3">
+                  <Form.Label htmlFor="tipoAtividadeSelect">Tipo de Atividade</Form.Label>
+                  <InputGroup> 
+                    <InputGroup.Text><FontAwesomeIcon icon={faRunning} /></InputGroup.Text> 
+                    <Form.Select id="tipoAtividadeSelect" value={tipoAtividade} onChange={(e) => setTipoAtividade(e.target.value)} required>
+                      <option value="">Selecione o tipo de atividade</option>
+                      {Object.entries(TipoAtividadeMap).map(([key, value]) => (
+                        <option key={key} value={key}>{value}</option>
+                      ))}
+                    </Form.Select>
+                  </InputGroup>
+                </Form.Group>
+                
             <div className="d-grid gap-2 mt-4">
               <Button variant={isEditMode ? 'warning' : 'info'} type="submit" disabled={loading}>
                 {loading ? (isEditMode ? 'Atualizando...' : 'Salvando...') : (isEditMode ? 'Atualizar Registro' : 'Salvar Registro')}
@@ -237,7 +233,9 @@ function DailyRecordPage() {
           </Form>
         </Card.Body>
       </Card>
+      </div>
     </div>
+  </div>
   );
 }
 

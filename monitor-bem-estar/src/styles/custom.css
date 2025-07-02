@@ -1,0 +1,182 @@
+/*Cores utilizadas*/
+:root{
+  --primary-color: #6c5ce7;     
+    --secondary-color: #a29bfe;   
+    --success-color: #00b894;     
+    --danger-color: #d63031;     
+    --info-color: #0984e3;        
+    --warning-color: #fdcb6e;     
+    --light-color: #f5f6fa;       
+    --dark-color: #2d3436;       
+    --text-color: #333;          
+    --heading-color: var(--dark-color); 
+    --border-radius-lg: 0.75rem; 
+}
+
+.bg-primary { background-color: var(--primary-color) !important; }
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+.btn-primary:hover {
+    background-color: darken(var(--primary-color), 10%); 
+    background-color: #5a4bcf;
+    border-color: #5a4bcf;
+}
+.text-primary { color: var(--primary-color) !important; }
+.bg-info { background-color: var(--info-color) !important; }
+.bg-success { background-color: var(--success-color) !important; }
+.bg-warning { background-color: var(--warning-color) !important; }
+.btn-danger {
+    background-color: var(--danger-color);
+    border-color: var(--danger-color);
+}
+.btn-danger:hover {
+    background-color: #c02d2e;
+    border-color: #c02d2e;
+}
+
+.btn.rounded-circle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-success {
+    background-color: var(--success-color); 
+    border-color: var(--success-color);
+}
+.btn-success:hover {
+    background-color: darken(var(--success-color), 10%); 
+    border-color: darken(var(--success-color), 10%); 
+}
+
+#btnEvolucaoDiaria{
+    background-color: #6c5ce7;
+    color: white;
+}
+
+#btnEvolucaoDiaria:hover{
+    transform: translateY(-3px); 
+    transition: all 0.4s ease;
+    background-color: #7c71d0;
+    border-color: #7c71d0;
+}
+
+#btnSair:hover{
+    transform: translateY(-3px); 
+    transition: all 0.3s ease;
+    background-color: #c36868;
+    border-color: #c36868;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--light-color);
+    color: var(--text-color);
+}
+
+h1, h2, h3, h4, h6 {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: #484848;
+    justify-content: center;
+    display: flex;
+    margin-bottom: 5%;
+}
+
+
+.card {
+    border-radius: var(--border-radius-lg);
+    border: none; 
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05); 
+}
+
+/* NAVBAR */
+.navbar-brand {
+    font-weight: 700px; 
+}
+
+.navbar-nav .nav-link {
+    position: relative;
+    color: rgba(255, 255, 255, 0.75) !important; 
+    padding-bottom: 0.35rem;
+    transition: color 0.3s ease-in-out;
+}
+
+.navbar-nav .nav-link:hover {
+    color: white !important; 
+}
+
+.navbar-nav .nav-link::after {
+    content: ''; 
+    position: absolute; 
+    width: 0; 
+    height: 1px; 
+    background: white;
+    left: 50%; 
+    bottom: 0.1rem; 
+    transform: translateX(-50%); 
+    transition: width 0.3s ease-in-out; 
+}
+
+.navbar-nav .nav-link:hover::after {
+    width: 100%; 
+}
+
+.navbar-nav .ms-auto .nav-link .svg-inline--fa {
+    transition: color 0.3s ease-in-out;
+}
+
+.navbar-nav .ms-auto .nav-link:hover .svg-inline--fa {
+    color: white; 
+}
+
+.dropdown-menu {
+    background-color: var(--light-color);
+    border-radius: var(--border-radius-lg);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+}
+
+.dropdown-menu .dropdown-item {
+    color: var(--dark-color); 
+    background-color: transparent !important; 
+    transition: all 0.2s ease-in-out;
+}
+
+.dropdown-menu .dropdown-item:hover {
+    color: var(--primary-color) !important; 
+    background-color: var(--light-color); 
+}
+
+.form-control:disabled, .form-control[readonly] {
+    background-color: var(--light-color); 
+    opacity: 1;
+    border-color: #dee2e6; 
+}
+
+#TelaLogin{
+    margin-top: 125px;
+}
+
+#cardDashboard{
+    margin-top: 7%;
+}
+
+.fab-new-record {
+    width: 55px; 
+    height: 55px; 
+    padding: 0; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    border-radius: 50% !important; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25) !important;
+    transition: all 0.3s ease; 
+    border: none !important; 
+}
+
+.fab-new-record:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.35) !important; 
+    transform: translateY(-2px); 
+    filter: brightness(1.1); 
+}

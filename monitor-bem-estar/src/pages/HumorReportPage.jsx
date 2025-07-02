@@ -8,7 +8,8 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
-import { HumorMap } from '../utils/enumMappings'; 
+import { HumorMap } from '../utils/enumMappings';
+import { toast } from 'react-toastify';  
 
 ChartJS.register(
   ArcElement,
@@ -29,7 +30,7 @@ function HumorReportPage() {
       const token = localStorage.getItem('authToken');
 
       if (!token) {
-        setError('Você não está autenticado. Por favor, faça login.');
+        toast.error('Você não está autenticado. Por favor, faça login.');
         setLoading(false);
         navigate('/login');
         return;
@@ -52,14 +53,13 @@ function HumorReportPage() {
             return;
           }
           const errorData = await response.json();
-          setError(errorData.message || `Erro ao carregar relatório de humor: ${response.status}`);
+          toast.error(errorData.message || `Erro ao carregar relatório de humor: ${response.status}`);
           console.error('Erro ao carregar relatório de humor:', response.status, errorData);
           return;
         }
 
         const data = await response.json();
         setReportData(data);
-        console.log('Dados do Relatório de Humor:', data);
 
       } catch (err) {
         console.error('Erro na requisição:', err);

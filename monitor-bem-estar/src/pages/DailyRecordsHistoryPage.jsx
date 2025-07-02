@@ -3,22 +3,25 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Table, Spinner, Alert, Button } from 'react-bootstrap';
 import { HumorMap, TipoAtividadeMap } from '../utils/enumMappings';
+import { toast } from 'react-toastify';
+
+/* Icones */
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 
 function DailyRecordsHistoryPage() {
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [successMessage, setSuccessMessage] = useState(''); // Para mensagens de sucesso na exclusão
   const navigate = useNavigate();
 
-  // Função para buscar os registros (reutilizável)
   const fetchRecords = async () => {
     setLoading(true);
     setError('');
     const token = localStorage.getItem('authToken');
 
     if (!token) {
-      setError('Você não está autenticado. Por favor, faça login.');
+      toast.error('Você não está autenticado. Por favor, faça login.');
       setLoading(false);
       navigate('/login');
       return;
@@ -35,47 +38,44 @@ function DailyRecordsHistoryPage() {
 
       if (!response.ok) {
         if (response.status === 401 || response.status === 403) {
-          alert('Sessão expirada ou não autorizada. Faça login novamente.');
+          toast.error('Sessão expirada ou não autorizada. Faça login novamente.');
           localStorage.removeItem('authToken');
           navigate('/login');
           return;
         }
         const errorData = await response.json();
-        setError(errorData.message || `Erro ao carregar registros: ${response.status}`);
+        toast.error(errorData.message || `Erro ao carregar registros: ${response.status}`);
         console.error('Erro ao carregar registros:', response.status, errorData);
         return;
       }
 
       const data = await response.json();
       setRecords(data);
-      console.log('Meus Registros:', data);
 
     } catch (err) {
       console.error('Erro na requisição:', err);
-      setError('Não foi possível conectar ao servidor. Tente novamente mais tarde.');
+      toast.error('Não foi possível conectar ao servidor. Tente novamente mais tarde.');
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchRecords(); // Chama a função ao montar o componente
+    fetchRecords(); 
   }, [navigate]);
 
-  // Função para lidar com a exclusão
   const handleDelete = async (id) => {
     debugger;
     if (!window.confirm('Tem certeza que deseja excluir este registro?')) {
-      return; // O usuário cancelou
+      return; 
     }
 
     setLoading(true);
     setError('');
-    setSuccessMessage('');
     const token = localStorage.getItem('authToken');
 
     if (!token) {
-      setError('Você não está autenticado. Por favor, faça login.');
+      toast.error('Você não está autenticado. Por favor, faça login.');
       setLoading(false);
       navigate('/login');
       return;
@@ -83,7 +83,6 @@ function DailyRecordsHistoryPage() {
 
     try {
       const deleteUrl = `https://localhost:7071/api/registro-diarios/meu/${id}`;
-      console.log("Tentando DELETE para URL:", deleteUrl); 
 
       const response = await fetch(deleteUrl, {
         method: 'DELETE',
@@ -94,24 +93,24 @@ function DailyRecordsHistoryPage() {
 
       if (!response.ok) {
         if (response.status === 401 || response.status === 403) {
-          alert('Sessão expirada ou não autorizada. Faça login novamente.');
+          toast.error('Sessão expirada ou não autorizada. Faça login novamente.');
           localStorage.removeItem('authToken');
           navigate('/login');
           return;
         }
-        const errorData = await response.json(); // Tenta ler a mensagem de erro do corpo
-        setError(errorData.message || `Erro ao excluir registro: ${response.status}`);
+        const errorData = await response.json(); 
+        toast.error(errorData.message || `Erro ao excluir registro: ${response.status}`);
         console.error('Erro ao excluir registro:', response.status, errorData);
         return;
       }
 
-      setSuccessMessage('Registro excluído com sucesso!');
-      // Atualiza a lista de registros removendo o item excluído
+      toast.success('Registro excluído com sucesso!');
+     
       setRecords(records.filter(record => record.id !== id));
 
     } catch (err) {
       console.error('Erro na requisição de exclusão:', err);
-      setError('Não foi possível conectar ao servidor para excluir o registro.');
+      toast.error('Não foi possível conectar ao servidor para excluir o registro.');
     } finally {
       setLoading(false);
     }
@@ -133,7 +132,6 @@ function DailyRecordsHistoryPage() {
     <div className="container mt-5">
       <h2>Meus Registros Diários</h2>
       {error && <Alert variant="danger">{error}</Alert>}
-      {successMessage && <Alert variant="success">{successMessage}</Alert>} {/* Exibe mensagem de sucesso */}
 
       {records.length === 0 ? (
         <Alert variant="info" className="text-center">
@@ -157,14 +155,13 @@ function DailyRecordsHistoryPage() {
                 <td>{HumorMap[record.humor] || record.humor}</td>
                 <td>{record.horasCelular}</td>
                 <td>{TipoAtividadeMap[record.tipoAtividade] || record.tipoAtividade}</td>
-                <td>
-                  {/* Botão de Editar (implementaremos depois) */}
+                <td>     
                   <Button variant="warning" size="sm" className="me-2" onClick={() => navigate(`/daily-record/edit/${record.id}`)}>
-                    Editar
+                    <FontAwesomeIcon icon={faEdit} className='me-1' />Editar
                   </Button>
-                  {/* Botão de Excluir */}
+
                   <Button variant="danger" size="sm" onClick={() => handleDelete(record.id)}>
-                    Excluir
+                   <FontAwesomeIcon icon={faTrashAlt} className='me-1' /> Excluir
                   </Button>
                 </td>
               </tr>

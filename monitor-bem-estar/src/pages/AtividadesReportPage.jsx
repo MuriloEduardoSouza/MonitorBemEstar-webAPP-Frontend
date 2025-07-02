@@ -1,7 +1,7 @@
 // src/pages/AtividadesReportPage.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Spinner, Alert, Card, Form, Row, Col, Button as BootstrapButton } from 'react-bootstrap'; // Importe Form, Row, Col, Button as BootstrapButton
+import { Spinner, Alert, Card, Form, Row, Col, Button as BootstrapButton } from 'react-bootstrap'; 
 import { Bar } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -12,9 +12,8 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
-import { TipoAtividadeMap } from '../utils/enumMappings'; // Para mapear os números de tipo de atividade para nomes
+import { TipoAtividadeMap } from '../utils/enumMappings'; 
 
-// Registre os elementos necessários para o Chart.js
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -30,11 +29,10 @@ function AtividadesReportPage() {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  // Para o filtro de data (opcional, se quiser implementar o filtro no frontend)
   const [dataInicio, setDataInicio] = useState('');
   const [dataFim, setDataFim] = useState('');
 
-  const fetchReport = async () => { // Função refatorada para aceitar parâmetros de data
+  const fetchReport = async () => { 
     setLoading(true);
     setError('');
     const token = localStorage.getItem('authToken');
@@ -46,7 +44,6 @@ function AtividadesReportPage() {
       return;
     }
 
-    // Construir a URL com os parâmetros de data, se existirem
     let url = 'https://localhost:7071/api/registro-diarios/relatorio/atividades';
     const params = new URLSearchParams();
     if (dataInicio) {
@@ -94,8 +91,8 @@ function AtividadesReportPage() {
   };
 
   useEffect(() => {
-    fetchReport(); // Chama a função ao montar o componente ou quando dataInicio/dataFim mudam
-  }, [navigate, dataInicio, dataFim]); // Adicione dataInicio e dataFim como dependências
+    fetchReport(); 
+  }, [navigate, dataInicio, dataFim]); 
 
   const handleFilterSubmit = (event) => {
     event.preventDefault();
@@ -113,8 +110,6 @@ function AtividadesReportPage() {
     );
   }
 
-  // Preparar os dados para o gráfico de barras
-  // O backend retorna um array de objetos como [ { "Atividade": "1", "Quantidade": 5 }, ... ]
   const labels = reportData ? reportData.map(item => TipoAtividadeMap[item.atividade] || `Atividade ${item.atividade}`) : [];
   const dataValues = reportData ? reportData.map(item => item.quantidade) : [];
 
@@ -124,7 +119,7 @@ function AtividadesReportPage() {
       {
         label: 'Número de Registros',
         data: dataValues,
-        backgroundColor: 'rgba(255, 99, 132, 0.6)', // Cor de barra única
+        backgroundColor: 'rgba(255, 99, 132, 0.6)',
         borderColor: 'rgba(255, 99, 132, 1)',
         borderWidth: 1,
       },
@@ -135,7 +130,7 @@ function AtividadesReportPage() {
     responsive: true,
     plugins: {
       legend: {
-        display: false, // Não precisa de legenda se for um único dataset
+        display: false,
       },
       title: {
         display: true,
@@ -150,7 +145,7 @@ function AtividadesReportPage() {
           text: 'Quantidade',
         },
         ticks: {
-            stepSize: 1, // Garante que o eixo Y mostra números inteiros
+            stepSize: 1, 
         }
       },
     },
@@ -205,14 +200,14 @@ function AtividadesReportPage() {
 
       {reportData && reportData.length > 0 ? (
         <Card className="p-3 shadow-sm">
-          <div style={{ maxWidth: '700px', margin: 'auto' }}> {/* Limita o tamanho do gráfico */}
+          <div style={{ maxWidth: '700px', margin: 'auto' }}>
             <Bar data={chartData} options={chartOptions} />
           </div>
         </Card>
       ) : (
         <Alert variant="info" className="text-center">
           Nenhum registro de atividade encontrado para o período selecionado.
-          {/* O backend já deve retornar um array vazio, então esta mensagem deve aparecer quando não há dados */}
+          
         </Alert>
       )}
     </div>

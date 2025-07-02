@@ -1,19 +1,19 @@
 // src/pages/HorasCelularReportPage.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Spinner, Alert, Card, Row, Col } from 'react-bootstrap'; // Importe Row e Col para layout
-import { Bar } from 'react-chartjs-2'; // Opcional: para gráfico de barras
+import { Spinner, Alert, Card, Row, Col } from 'react-bootstrap'; 
+import { Bar } from 'react-chartjs-2'; 
 import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
-  BarElement, // Necessário para gráficos de barra
+  BarElement, 
   Title,
   Tooltip,
   Legend,
 } from 'chart.js';
 
-// Registre os elementos necessários para o Chart.js (se for usar o gráfico)
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -24,7 +24,7 @@ ChartJS.register(
 );
 
 function HorasCelularReportPage() {
-  const [reportData, setReportData] = useState(null); // Ex: { HorasUltimaSemana: 10, HorasMesAtual: 50 }
+  const [reportData, setReportData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const navigate = useNavigate();
@@ -90,7 +90,6 @@ function HorasCelularReportPage() {
     );
   }
 
-  // --- Opção de Dados para Gráfico de Barras (se decidir usar) ---
   const chartData = {
     labels: ['Última Semana', 'Mês Atual'],
     datasets: [
@@ -125,7 +124,6 @@ function HorasCelularReportPage() {
       },
     },
   };
-  // --- Fim da Opção de Gráfico ---
 
   return (
     <div className="container mt-5">
@@ -153,14 +151,6 @@ function HorasCelularReportPage() {
             </Card>
           </Col>
           
-          {/* Opção para exibir o gráfico de barras abaixo dos cards */}
-          {/*
-          <Col xs={12} className="mt-4">
-            <Card className="p-3 shadow-sm">
-              <Bar data={chartData} options={chartOptions} />
-            </Card>
-          </Col>
-          */}
         </Row>
       ) : (
         <Alert variant="info" className="text-center">

@@ -1,5 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { Form, Button, Card, InputGroup } from 'react-bootstrap';
+import { toast } from 'react-toastify';
+
+/* Fontes */
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+/* Icones */
+import { faEnvelope, faLock, faHeartbeat } from '@fortawesome/free-solid-svg-icons';
 
 function LoginPage({ onLoginSuccess }) {
   
@@ -25,77 +32,73 @@ function LoginPage({ onLoginSuccess }) {
       if (!response.ok){
 
        const errorData = await response.json();
-        setError(errorData.errors?.Senha?.[0] || errorData.message || 'Credenciais inválidas.');
+        toast.error(errorData.errors?.Senha?.[0] || errorData.message || 'Credenciais inválidas.');
         console.error('Erro de login:', response.status, errorData);
         return;
       }
 
       const data = await response.json();
-      console.log('Login bem-sucedido!', data);
+      toast.success('Login bem-sucedido!', data);
 
       localStorage.setItem('authToken', data.token);
 
        if (onLoginSuccess) {
         onLoginSuccess();
       }
-
+      toast.success('Login efetuado com sucesso!');
       navigate('/dashboard');
 
     } catch (error){
       console.error('Erro na requisição', error);
-      setError('Não foi possivel conectar ao servidor. Tente novamente mais tarde.');
+      toast.error('Não foi possivel conectar ao servidor. Tente novamente mais tarde.');
     }
   };
 
    return (
-    <div className="container mt-5">
+    <div className="container" id='TelaLogin'>
       <div className="row justify-content-center">
         <div className="col-md-6 col-lg-4">
           <div className="card shadow-lg">
-            <div className="card-header text-center bg-primary text-white">
-              <h3>Login no Monitor de Bem-Estar</h3>
-            </div>
-            <div className="card-body">
-              <form onSubmit={handleSubmit}>
-                {/* Exibe mensagens de erro, se houver */}
-                {error && <div className="alert alert-danger" role="alert">{error}</div>}
+            <Card.Header className="text-center bg-primary text-white py-3"> {/* py-3 para um padding vertical */}
+              <h3 className="mb-0 d-flex align-items-center justify-content-center"> {/* mb-0 para remover margem, d-flex para alinhar */}
+                <FontAwesomeIcon icon={faHeartbeat} className="me-2" size="lg" /> {/* <-- Ícone do logo aqui */}
+                Login 
+              </h3>
+            </Card.Header>
 
-                <div className="mb-3">
-                  <label htmlFor="emailInput" className="form-label">Email</label>
-                  <input
-                    type="email"
-                    className="form-control"
-                    id="emailInput"
-                    placeholder="seuemail@exemplo.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
-                </div>
-                <div className="mb-3">
-                  <label htmlFor="passwordInput" className="form-label">Senha</label>
-                  <input
-                    type="password"
-                    className="form-control"
-                    id="passwordInput"
-                    placeholder="Sua senha"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                  />
-                </div>
+
+            <Card.Body>
+              <form onSubmit={handleSubmit}>
+                
+                <Form.Group className="mb-3">
+                  <Form.Label htmlFor="emailInput">Email</Form.Label>
+                  <InputGroup> 
+                    <InputGroup.Text><FontAwesomeIcon icon={faEnvelope} /></InputGroup.Text> 
+                    <Form.Control type="email" id="emailInput" placeholder="seuemail@exemplo.com" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                  </InputGroup>
+                </Form.Group>
+
+                <Form.Group className="mb-3">
+                  <Form.Label htmlFor="passwordInput">Senha</Form.Label>
+                  <InputGroup>
+                    <InputGroup.Text><FontAwesomeIcon icon={faLock} /></InputGroup.Text> 
+                    <Form.Control type="password" id="passwordInput" placeholder="Sua senha" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                  </InputGroup>
+                </Form.Group>
+
                 <div className="d-grid gap-2">
                   <button type="submit" className="btn btn-primary btn-lg">
                     Entrar
                   </button>
                 </div>
               </form>
-            </div>
-            <div className="card-footer text-center">
+            </Card.Body>
+            
+           <Card.Footer className='text-center'>
               <small>
                 Não tem uma conta? <Link to="/register">Cadastre-se aqui</Link> 
               </small>
-            </div>
+            </Card.Footer>
           </div>
         </div>
       </div>
