@@ -56,7 +56,7 @@
     color: white;
 }
 
-#btnEvolucaoDiaria:hover{
+#btnEvolucaoDiaria, #btnRegistro:hover{
     transform: translateY(-3px); 
     transition: all 0.4s ease;
     background-color: #7c71d0;
@@ -70,10 +70,14 @@
     border-color: #c36868;
 }
 
-body {
+body, html {
     font-family: 'Roboto', sans-serif;
     background-color: var(--light-color);
     color: var(--text-color);
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    width: 100%;
 }
 
 h1, h2, h3, h4, h6 {
@@ -158,9 +162,7 @@ h1, h2, h3, h4, h6 {
     margin-top: 125px;
 }
 
-#cardDashboard{
-    margin-top: 7%;
-}
+
 
 .fab-new-record {
     width: 55px; 
@@ -180,3 +182,62 @@ h1, h2, h3, h4, h6 {
     transform: translateY(-2px); 
     filter: brightness(1.1); 
 }
+
+/* PÁGINA INICIAL */
+.dashboard-dark-section{
+    width: 100vw;                       
+    min-height: 100vh;                      
+    background-image: url('../public/img/AGORAVAI.jpeg');
+    background-size: 100% 100%;            
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+
+.dashboard-light-section {
+    width: 100vw;
+    min-height: 100vh;
+    background-image: url('../public/img/img_bemestar_1.jpeg');
+    background-size: 100% 100%;            
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+#cardDescricao{
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.35) !important;
+}
+
+#imgDashboard:hover{
+    cursor: pointer;
+    transition: all 0.5s ease; 
+    transform: translateY(-2px); 
+}
+
+.text-center{
+    text-align: center;
+}
+
+/* CAROUSEL */
+.swiper-button-next,
+.swiper-button-prev {
+  color: #28a745; /* verde */
+  font-size: 20px;
+}
+
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+  color: #218838;
+  transform: scale(1.1);
+}
+
+

@@ -1,13 +1,30 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate, Link, Form } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Card, Spinner, Alert, Row, Col, Button } from 'react-bootstrap';
 import { HumorMap } from '../utils/enumMappings';
+import CountUp from 'react-countup';
+import { useInView } from 'react-intersection-observer';
+import ImageCarousel from '../components/common/ImageCarousel';
 
-/* Fontes */
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-/* Icones */
-import { faCalendarDay } from '@fortawesome/free-solid-svg-icons';
+
+ function ContadorAnimado({ titulo, valorFinal}){
+    const { ref, inView } = useInView({
+      triggerOnce: true,
+      threshold: 0.5,
+      });
+
+    return(
+      <div ref={ref} className="text-center my-4">
+        <h5 className="text-primary">{titulo}</h5>
+        <h2 style={{ fontWeight: 'bold', fontSize: '2.5rem' }}>
+          {inView && <CountUp end={valorFinal} duration={2} />}
+        </h2>
+      </div>
+    );
+        
+      
+  }
 
 function DashboardPage() {
   const [userData, setUserData] = useState(null);
@@ -15,9 +32,13 @@ function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const navigate = useNavigate();
-  const [dashboardSummary, setDashboardSummary] = useState(null); 
+  const [dashboardSummary, setDashboardSummary] = useState(null);
+  
+
+ 
 
   useEffect(() => {
+    
     const fetchDashboardData = async () => {
       setLoading(true);
       setError('');
@@ -89,6 +110,7 @@ function DashboardPage() {
     fetchDashboardData();
   }, [navigate]);
 
+
   if (loading) {
     return (
       <div className="text-center mt-5">
@@ -101,10 +123,13 @@ function DashboardPage() {
   }
 
   return (
-    <div className="mt-5">
+    <>
+    
+      <div className="dashboard-dark-section">
+        <div className="container py-5">
       {error && <div className="alert alert-danger">{error}</div>}
 
-      <h2 className="mb-4">Dashboard do Usuário</h2>
+      <h2 className="mb-4"><strong>Dashboard do Usuário</strong></h2>
       <div className="row" id='cardDashboard'>
         <div className="col-md-6 mb-4">
           <div className="card shadow">
@@ -126,17 +151,18 @@ function DashboardPage() {
           </div>
         </div>
       </div>
-
-      <Row className="mb-5 mt-5 align-items-center"> 
-        <Col md={6} id='imgDashboard'>
+  
+      <Row className="mb-5 mt-5 align-items-center" id='testando'> 
+        <Col md={6}>
           <img 
-            src="/src/img/img_bem_estar_2.jpeg" 
+            src="/public/img/img_bem_estar_2.jpeg" 
             alt="Conceito de Bem-Estar e Monitoramento" 
-            className="img-fluid rounded shadow-sm" 
+            className="img-fluid rounded shadow-sm"
+            id='imgDashboard'
           />
         </Col>
         <Col md={6}>
-          <Card className="h-100 shadow-sm border-0" > 
+          <Card className="h-100 shadow-sm border-0" id="cardDescricao"> 
             <Card.Body >
               <Card.Title className="text-primary">
                 O Que é o Monitor de Bem-Estar?
@@ -151,9 +177,73 @@ function DashboardPage() {
           </Card>
         </Col>
       </Row>
+      </div>
+      </div>
 
-    </div>
+       <div className="dashboard-light-section">
+        <div className="container py-5">
+        <Row className="align-items-center my-5">
+          <Col md={6}>
+            <Card className="h-100 shadow-sm border-0" id='cardDescricao'>
+              <Card.Body>
+              <Card.Title className="text-primary">Outro Título</Card.Title>
+              <Card.Text>
+                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis ducimus sint voluptates tempore alias aut in beatae labore. Soluta voluptas dignissimos quam animi non voluptatibus, et numquam quisquam magni laborum.
+                  <br /> <br />
+                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit illum suscipit aspernatur neque in libero veritatis placeat optio vitae molestias quia ad corrupti omnis asperiores laboriosam eum, qui voluptatibus ipsa!
+                  <br /> <br />
+                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Facilis in architecto impedit ea, esse sit eius aut optio dignissimos, dolorum sint omnis fugiat nesciunt cumque. Harum porro unde sit natus.
+              </Card.Text>
+              </Card.Body>
+            </Card>
+            </Col>
+
+        <Col md={6} className="order-md-last">
+          <img
+            src="/public/img/corrida_bem_estar.jpeg"
+            alt="Imagem lado direito"
+            className="img-fluid rounded shadow-sm"
+            id='imgDashboard'
+          />
+        </Col>
+      </Row>
+      </div>
+      </div>  
+
+
+      <div className="py-5 bg-light">
+  <div className="container">
+    <Row>
+      <Col md={4}>
+        <ContadorAnimado titulo="Usuários Cadastrados" valorFinal={2548} />
+      </Col>
+      <Col md={4}>
+        <ContadorAnimado titulo="Pessoas satisfeitas" valorFinal={2032} />
+      </Col>
+      <Col md={4}>
+        <ContadorAnimado titulo="Faixa de registros diários" valorFinal={548} />
+      </Col>
+    </Row>
+  </div>
+</div>
+
+<div className="text-center mt-4">
+  <Button 
+    variant="primary" 
+    size="lg" 
+    style={{ width: '60%' }}
+    onClick={() => navigate('/daily-record')}
+    id='btnRegistro'
+  >
+    Quero realizar um novo registro
+  </Button>
+</div>
+
+    <ImageCarousel />
+
+    </>
   );
 }
 
 export default DashboardPage;
+
