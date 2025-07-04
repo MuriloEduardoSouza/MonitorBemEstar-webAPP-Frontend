@@ -186,13 +186,15 @@ function DashboardPage() {
           <Col md={6}>
             <Card className="h-100 shadow-sm border-0" id='cardDescricao'>
               <Card.Body>
-              <Card.Title className="text-primary">Outro Título</Card.Title>
+              <Card.Title className="text-primary">Saúde, Bem-Estar e Equilíbrio</Card.Title>
               <Card.Text>
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis ducimus sint voluptates tempore alias aut in beatae labore. Soluta voluptas dignissimos quam animi non voluptatibus, et numquam quisquam magni laborum.
+                Saúde e bem-estar são mais do que a ausência de doenças; são estados de equilíbrio físico, mental, emocional e social que nos permitem viver plenamente e desfrutar cada momento. Para alcançar essa plenitude, é essencial cultivar um olhar atento sobre diversos pilares interligados, onde a alimentação se destaca como um dos fundamentos
                   <br /> <br />
-                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit illum suscipit aspernatur neque in libero veritatis placeat optio vitae molestias quia ad corrupti omnis asperiores laboriosam eum, qui voluptatibus ipsa!
+                 Iniciar ou aprimorar um estilo de vida focado no bem-estar pode parecer desafiador, mas cada pequena escolha conta. Comece com passos pequenos e sustentáveis, celebre suas conquistas e, acima de tudo, seja gentil consigo mesmo nesse processo.
                   <br /> <br />
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Facilis in architecto impedit ea, esse sit eius aut optio dignissimos, dolorum sint omnis fugiat nesciunt cumque. Harum porro unde sit natus.
+                <strong>Cuidar de você é o maior investimento que pode fazer.</strong>
+                  
+                
               </Card.Text>
               </Card.Body>
             </Card>

@@ -5,7 +5,7 @@
     --success-color: #00b894;     
     --danger-color: #d63031;     
     --info-color: #0984e3;        
-    --warning-color: #fdcb6e;     
+    --warning-color: #6c5ce7;     
     --light-color: #f5f6fa;       
     --dark-color: #2d3436;       
     --text-color: #333;          
@@ -56,11 +56,15 @@
     color: white;
 }
 
-#btnEvolucaoDiaria, #btnRegistro:hover{
+#btnEvolucaoDiaria, #btnSlvRegistro, #btnRegistro:hover{
     transform: translateY(-3px); 
     transition: all 0.4s ease;
     background-color: #7c71d0;
     border-color: #7c71d0;
+}
+
+#btnEvolucaoDiaria, #btnSlvRegistro, #btnRegistro{
+    color: white;
 }
 
 #btnSair:hover{

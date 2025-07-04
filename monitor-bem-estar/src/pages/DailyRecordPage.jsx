@@ -177,7 +177,7 @@ function DailyRecordPage() {
         <div className="col-md-8 col-lg-6">
 
       <Card className="shadow-lg">
-        <Card.Header className={`text-center ${isEditMode ? 'bg-warning' : 'bg-info'} text-white`}>
+        <Card.Header className={`text-center ${isEditMode ? 'bg-warning' : 'bg-primary'} text-white`} >
           <h3>{isEditMode ? 'Editar Registro Diário' : 'Novo Registro Diário'}</h3>
         </Card.Header>
         <Card.Body>
@@ -226,7 +226,7 @@ function DailyRecordPage() {
                 </Form.Group>
                 
             <div className="d-grid gap-2 mt-4">
-              <Button variant={isEditMode ? 'warning' : 'info'} type="submit" disabled={loading}>
+              <Button variant={isEditMode ? 'warning' : 'info'} type="submit" disabled={loading} id='btnSlvRegistro'>
                 {loading ? (isEditMode ? 'Atualizando...' : 'Salvando...') : (isEditMode ? 'Atualizar Registro' : 'Salvar Registro')}
               </Button>
             </div>
